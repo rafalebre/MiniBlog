@@ -35,20 +35,20 @@ nav button:hover {
 
 /* form styles */
 form {
-  display: flex;
+  max-width: 40%;
   margin: 0 auto;
 }
 
 label {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1px;
+  margin-bottom: 1em;
 }
 
 label span {
   margin-bottom: .3em;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
 }
 
 input,
