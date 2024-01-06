@@ -6,7 +6,6 @@ import {
     signInWithEmailAndPassword,
     updateProfile,
     signOut,
-    AuthErrorCodes
 } from "firebase/auth"
 
 import { useState, useEffect } from "react"
