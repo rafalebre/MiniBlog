@@ -1,3 +1,4 @@
+import { useAuthentication } from "../../hooks/useAuthentication";
 import styles from "./Register.module.css";
 
 import { useState, useEffect } from "react";
@@ -9,7 +10,9 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
 
-  const handleSubmit = (e) => {
+  const { createUser, error: authError, loading } = useAuthentication();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("")
@@ -20,13 +23,22 @@ const Register = () => {
       password
     }
 
-    if(password !== confirmPassword) {
+    if (password !== confirmPassword) {
       setError("The chosen passwords doesn't match!")
       return
     }
 
-    console.log(user);
-  }
+    const res = await createUser(user)
+
+    console.log(res);
+  };
+
+  useEffect(() => {
+    if (authError) {
+      setError(authError)
+    }
+  }, [authError])
+
 
   return (
     <div className={styles.register}>
@@ -45,35 +57,36 @@ const Register = () => {
         </label>
         <label>
           <span>E-mail:</span>
-          <input 
-          type="email" 
-          name="email" 
-          required 
-          placeholder="User e-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="User e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} />
         </label>
         <label>
           <span>Password:</span>
-          <input 
-          type="password" 
-          name="password" 
-          required 
-          placeholder="Type your password" 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}/>
+          <input
+            type="password"
+            name="password"
+            required
+            placeholder="Type your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} />
         </label>
         <label>
           <span>Password confirmation:</span>
-          <input 
-          type="password" 
-          name="confirmPassword" 
-          required 
-          placeholder="Confirm your password" 
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}/>
+          <input
+            type="password"
+            name="confirmPassword"
+            required
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)} />
         </label>
-        <button className="btn">Register</button>
+        {!loading && <button className="btn">Register</button>}
+        {loading &&  <button className="btn" disabled>Wait...</button>}
         {error && <p className="error">{error}</p>}
       </form>
     </div>
