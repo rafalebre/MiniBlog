@@ -30,7 +30,7 @@ export const useAuthentication = () => {
         checkIfIsCancelled()
 
         setLoading(true)
-        setError(null)
+       
 
         try {
             const { user } = await createUserWithEmailAndPassword(
@@ -40,7 +40,7 @@ export const useAuthentication = () => {
             )
 
             await updateProfile(user, {
-                displayName: data.displayName
+                displayName: data.displayName,
             })
 
             setLoading(false)
@@ -56,16 +56,15 @@ export const useAuthentication = () => {
 
             if (error.message.includes("Password")) {
                 systemErrorMessage = "The password should contains 6 characters at least."
-            } else if (error.message.includes("email already")) {
+            } else if (error.message.includes("email-already")) {
                 systemErrorMessage = "The e-mail is already registered."
             } else {
                 systemErrorMessage = "There's been an error. Try again in a few moments."
             }
-
-            setLoading(false);
+            setLoading(false)
             setError(systemErrorMessage);
         }
-
+        
 
     };
 
@@ -75,6 +74,38 @@ export const useAuthentication = () => {
         checkIfIsCancelled()
 
         signOut(auth)
+
+    };
+
+    // login - sign in
+    const login = async(data) => {
+        checkIfIsCancelled()
+
+        setLoading(true)
+        setError(false)
+
+        try {
+
+            await signInWithEmailAndPassword(auth, data.email, data.password)
+            setLoading(false);
+            
+        } catch (error) {
+
+            let systemErrorMessage
+
+            if (error.message.includes("user-not-found")) {
+                systemErrorMessage = "User not found."
+            } else if (error.message.includes("wrong-password")) {
+                systemErrorMessage = "Incorrect password."
+            } else {
+                systemErrorMessage = "There's been an error. Please try again in a few moments."
+            }
+
+            setError(systemErrorMessage);
+            setLoading(false);
+            
+        }
+
 
     }
 
@@ -89,6 +120,7 @@ export const useAuthentication = () => {
         error,
         loading,
         logout,
+        login,
     }
 
 }

@@ -5,12 +5,11 @@ import { useAuthentication } from "../../hooks/useAuthentication";
 import { useState, useEffect } from "react";
 
 const Login = () => {
-
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
 
-  const { createUser, error: authError, loading } = useAuthentication();
+  const { login, error: authError, loading } = useAuthentication();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,12 +17,11 @@ const Login = () => {
     setError("")
 
     const user = {
-   
       email,
       password
     }
 
-    const res = await createUser(user)
+    const res = await login(user)
 
     console.log(res);
   };
@@ -35,10 +33,9 @@ const Login = () => {
   }, [authError])
   return (
     <div className={styles.login}>
-       <h1>Login</h1>
+      <h1>Login</h1>
       <p>Login to be able to interact</p>
       <form onSubmit={handleSubmit}>
-        
         <label>
           <span>E-mail:</span>
           <input
@@ -59,9 +56,9 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)} />
         </label>
-       
+
         {!loading && <button className="btn">Login</button>}
-        {loading &&  <button className="btn" disabled>Wait...</button>}
+        {loading && <button className="btn" disabled>Wait...</button>}
         {error && <p className="error">{error}</p>}
       </form>
     </div>
