@@ -24,10 +24,12 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
 
                 let q
 
-                // busca
-                // dashboard
-
-                q = await query(collectionRef, orderBy("createAt", "desc"))
+                if(search) {
+                    q = await query(collectionRef, where("tags", "array-contains", search), 
+                    orderBy("createAt", "desc"))
+                } else {
+                    q = await query(collectionRef, orderBy("createAt", "desc"))
+                }
 
                 await onSnapshot(q, (querySnapshot) => {
 
