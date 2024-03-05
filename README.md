@@ -1,3 +1,98 @@
+# MiniBLOG
+
+## Description
+
+MiniBLOG is a lightweight blogging platform that allows users to share photos via URLs, providing titles, descriptions, and tagging each post with relevant keywords. Designed for simplicity, it does not support user interactions with posts beyond viewing detailed information by opening the photo to access the descriptive text. It features a search tool that matches words exactly as tagged, enhancing the user experience by filtering content through tags.
+
+## Features
+
+- **User Authentication**: Secure sign-up and login functionality powered by Firebase.
+- **Post Creation**: Users can share photos by submitting URLs, along with titles, descriptions, and multiple tags for each post.
+- **Search Functionality**: A search tool that allows users to find posts by matching exact tags.
+- **User Dashboard**: A dashboard for users to view and edit their own posts.
+
+## Technology Stack
+
+- **Frontend**: React (utilizing context, router, hooks, and more)
+- **Backend**: Firebase for user authentication and Firestore as the database solution.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm installed.
+- A Firebase account.
+
+### Setup
+
+1. Clone this repository to your local machine:
+git clone https://github.com/rafalebre/MiniBlog.git
+
+2. Navigate to the project directory and install dependencies:
+cd MiniBlog
+npm install
+
+3. Set up Firebase:
+- Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+- Add a web app to your Firebase project and get your Firebase configuration object.
+
+### Configuring Firebase
+
+1. Inside the `src/firebase` directory of your project, create a file named `config.js`.
+2. Use the Firebase configuration object you obtained from adding a web app to your Firebase project. It should look similar to this:
+
+ ```js
+ import { initializeApp } from "firebase/app";
+ import { getFirestore } from "firebase/firestore";
+
+ const firebaseConfig = {
+   apiKey: "your-apiKey",
+   authDomain: "your-authDomain",
+   projectId: "your-projectId",
+   storageBucket: "your-storageBucket",
+   messagingSenderId: "your-messagingSenderId",
+   appId: "your-appId"
+ };
+
+ const app = initializeApp(firebaseConfig);
+ const db = getFirestore(app);
+
+ export { db };
+ ```
+
+ Replace the placeholder values with your actual Firebase config values.
+
+### Running the Application
+
+After configuring Firebase, you can start the application by running:
+npm start
+
+
+This will launch the MiniBLOG on `http://localhost:3000`.
+
+## Screenshots
+
+### Home Page for a Logged-In User
+![Home Page](https://github.com/rafalebre/MiniBlog/blob/main/screenshots/Screenshot%202024-03-05%20at%2018.28.38.png)
+
+### Post Creation Form
+![Create Post Form](https://github.com/rafalebre/MiniBlog/blob/main/screenshots/Screenshot%202024-03-05%20at%2018.28.48.png)
+
+### User Dashboard with Edit Options
+![Dashboard](https://github.com/rafalebre/MiniBlog/blob/main/screenshots/Screenshot%202024-03-05%20at%2018.28.59.png)
+
+## Contribution
+
+This project was created as a learning endeavor, and I'm open to anyone who wishes to contribute or fork the repository to expand on the MiniBLOG. Feel free to send pull requests or create issues for any bugs you find or features you think would make a great addition.
+
+## Contact
+
+For any queries or suggestions, feel free to reach out through GitHub.
+
+
+
+
+EXTRAS
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
