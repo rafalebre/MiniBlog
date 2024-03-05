@@ -89,11 +89,20 @@ This project was created as a learning endeavor, and I'm open to anyone who wish
 
 For any queries or suggestions, feel free to reach out through GitHub.
 
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
 
-
-
-EXTRAS
-# Getting Started with Create React App
+# EXTRAS
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
