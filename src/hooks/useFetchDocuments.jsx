@@ -6,7 +6,7 @@ export const useFetchDocuments = (docCollection, search = null, uid = null, page
   const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     setLoading(true);
