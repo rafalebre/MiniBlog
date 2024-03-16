@@ -13,21 +13,22 @@ export const useFetchDocuments = (docCollection, search = null, uid = null, page
 
     const fetchDocuments = async () => {
       const collectionRef = collection(db, docCollection);
-      let q = query(collectionRef, orderBy("createAt", "desc"), limit(10 * page));
+      let q = query(collectionRef, orderBy("createAt", "desc"), limit(10 * page + 1)); // Solicita um documento a mais para verificar se há mais.
 
       if (search) {
-        q = query(collectionRef, where("tagsArray", "array-contains", search), orderBy("createAt", "desc"), limit(10 * page));
+        q = query(collectionRef, where("tagsArray", "array-contains", search), orderBy("createAt", "desc"), limit(10 * page + 1));
       } else if (uid) {
-        q = query(collectionRef, where("uid", "==", uid), orderBy("createAt", "desc"), limit(10 * page));
+        q = query(collectionRef, where("uid", "==", uid), orderBy("createAt", "desc"), limit(10 * page + 1));
       }
 
       onSnapshot(q, (snapshot) => {
-        const newDocuments = snapshot.docs.map(doc => ({
+        const isMore = snapshot.docs.length > 10 * page;
+        const newDocuments = snapshot.docs.slice(0, 10 * page).map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setDocuments(newDocuments); // Acumula os documentos sem cortar os anteriores
-        setHasMore(snapshot.docs.length > 0);
+        setDocuments(prevDocs => page === 1 ? newDocuments : [...prevDocs, ...newDocuments.slice(prevDocs.length)]); // Acumula os documentos de maneira correta.
+        setHasMore(isMore);
         setLoading(false);
       }, (error) => {
         console.error(error);
