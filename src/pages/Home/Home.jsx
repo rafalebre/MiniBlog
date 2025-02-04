@@ -1,30 +1,27 @@
-// CSS
 import styles from './Home.module.css';
-
-// hooks
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useFetchDocuments } from '../../hooks/useFetchDocuments';
-
-//components
 import PostDetail from '../../components/PostDetail';
 
 const Home = () => {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
-  const { documents: posts, loading, hasMore } = useFetchDocuments("posts", query, null, page);
+  // Importante: passamos null como segundo parâmetro para não afetar a query principal
+  const { documents: posts, loading, hasMore } = useFetchDocuments("posts", null, null, page);
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (query) {
-      navigate(`/search?q=${query}`);
+    
+    if (query.trim()) {
+      return navigate(`/search?q=${query.trim()}`);
     }
   };
 
   const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
+    setPage(prevPage => prevPage + 1);
   };
 
   return (
@@ -34,28 +31,28 @@ const Home = () => {
         <input
           type="text"
           placeholder="Or search by tags..."
+          value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <button type="submit" className="btn btn-dark">Search</button>
       </form>
       <div>
         {loading && <p>Loading...</p>}
-        {!loading && posts.map((post) => <PostDetail key={post.id} post={post} />)}
-        {posts.length === 0 && !loading && (
+        {posts && posts.length > 0 && 
+          posts.map((post) => <PostDetail key={post.id} post={post} />)
+        }
+        {posts && posts.length === 0 && !loading && (
           <div className={styles.noposts}>
             <p>No posts were found</p>
             <Link to="/posts/create" className="btn">Create first post</Link>
           </div>
         )}
-        {!loading && hasMore ? (
+        {!loading && hasMore && (
           <button onClick={handleLoadMore} className="btn">Load More</button>
-        ) : (
-          !loading && <button disabled className="btn" style={{ opacity: 0.5 }}>No more posts</button>
         )}
       </div>
     </div>
   );
 };
-
 
 export default Home;
