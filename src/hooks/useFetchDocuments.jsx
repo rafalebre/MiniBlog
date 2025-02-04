@@ -14,18 +14,35 @@ export const useFetchDocuments = (docCollection, search = null, uid = null, page
       let q;
 
       try {
+        // Busca por UID (Dashboard)
         if (uid) {
           q = query(
             collectionRef,
             where("uid", "==", uid),
-            orderBy("createAt", "desc"),
-            limit(10 * page + 1)
+            orderBy("createAt", "desc")
           );
+
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const docs = [];
+            
+            querySnapshot.forEach((doc) => {
+              docs.push({
+                id: doc.id,
+                ...doc.data(),
+              });
+            });
+
+            setDocuments(docs);
+            setHasState(false);
+            setLoading(false);
+          });
+
+          return () => unsubscribe();
         } 
+        // Busca por termo (Search)
         else if (search) {
           const searchTerm = search.trim().toLowerCase();
           
-          // Buscar todos os posts quando estiver pesquisando
           q = query(
             collectionRef,
             orderBy("createAt", "desc")
@@ -40,7 +57,6 @@ export const useFetchDocuments = (docCollection, search = null, uid = null, page
                 ...doc.data(),
               };
               
-              // Inclui o post se alguma tag contém o termo de busca
               if (post.tagsArray.some(tag => tag.includes(searchTerm))) {
                 docs.push(post);
               }
@@ -53,6 +69,7 @@ export const useFetchDocuments = (docCollection, search = null, uid = null, page
 
           return () => unsubscribe();
         } 
+        // Busca normal (Home)
         else {
           q = query(
             collectionRef,
